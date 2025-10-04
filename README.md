@@ -1,11 +1,10 @@
-# Hackmate
+# JerkMate - The Best Project to Ever Exist
 
 [![Hackmate on Peerlist](https://peerlist.io/api/v1/projects/embed/PRJHJKNR7KLEGQGOG1AQJJMBRREMRN?showUpvote=false&theme=light)](https://peerlist.io/dfordp/project/hackmate)
 [![Hackmate on Product Hunt](https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1018821&theme=light)](https://www.producthunt.com/products/hackmate?utm_source=badge-featured&utm_medium=badge&utm_source=badge-hackmate)
 
-
 **Live project:** [hackmate.app](https://hackmate.app/)
----
+--------------------------
 
 ## Overview
 
@@ -59,8 +58,8 @@ This approach removes friction from networking by focusing only on aligned inten
 
 ## Redis Store Design
 
-| Purpose       | Type | Key Format          | Example                          |
-| ------------- | ---- | ------------------- | -------------------------------- |
+| Purpose       | Type | Key Format            | Example                          |
+| ------------- | ---- | --------------------- | -------------------------------- |
 | Likes Given   | SET  | `likes:<user_id>`   | Used to prevent duplicate swipes |
 | Match Queue   | LIST | `matches:<user_id>` | Stores mutual matches            |
 | User Profiles | HASH | `user:<user_id>`    | Caches basic profile information |
@@ -113,9 +112,7 @@ Planned features include:
 * Project pitch cards and lightweight portfolios
 * Improved match feed and conversation prompts
 
-
 Here’s a **`CONTRIBUTING.md`** file written in the same style as your `README.md` (no emojis, no AI buzzwords, no double dashes, and keeping the passion-project tone):
-
 
 # Contributing to Hackmate
 
@@ -131,7 +128,6 @@ For Discussions Join : [Discord](https://discord.gg/E8MaEyD7ws)
 4. Make your changes in small, focused commits.
 5. Run the linter and tests before pushing.
 6. Submit a pull request against the `main` branch.
-
 
 ## Reporting Issues
 
@@ -152,13 +148,11 @@ Before starting work on a new feature, open an issue to discuss the idea. This h
 * The proposed solution.
 * Any impact on the existing data model or flows.
 
-
 ## Code Guidelines
 
 * Follow existing patterns in the codebase.
 * Use TypeScript where possible to keep types clear and reduce errors.
 * Keep functions small and focused.
-
 
 ## Development Environment
 
@@ -170,7 +164,6 @@ Before starting work on a new feature, open an issue to discuss the idea. This h
 
 Environment variables are required for Redis and Postgres (see README).
 
-
 ## Pull Requests
 
 When opening a pull request:
@@ -180,12 +173,9 @@ When opening a pull request:
 * Add migration or setup notes if needed.
 * Keep PRs small and focused for easier review.
 
-
 ## Community and Communication
 
 The project also has a community Discord server where contributors share ideas, feedback, and roadmaps. Once you make your first contribution, feel free to join and introduce yourself.
-
-
 
 ## License
 
