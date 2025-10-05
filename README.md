@@ -7,6 +7,11 @@
 **Live project:** [hackmate.app](https://hackmate.app/)
 ---
 
+## Project Owner
+
+**dpji:** [dpji](https://github.com/dpji)
+
+
 ## Overview
 
 Hackmate is a swipe-based matchmaking platform designed for founders and builders to meet potential co-founders, collaborators, and indie hackers.
