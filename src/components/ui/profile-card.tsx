@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 'use client'
 
@@ -263,7 +262,7 @@ export default function ProfileCard({
           </CardContent>
 
           {/* Card Footer (buttons) */}
-          <CardFooter className="flex justify-center gap-6 bg-neutral-900 pb-6 pt-2">
+          <CardFooter className="flex justify-center gap-4 bg-neutral-900 pb-6 pt-2">
             <Button
               size="icon"
               variant="outline"
