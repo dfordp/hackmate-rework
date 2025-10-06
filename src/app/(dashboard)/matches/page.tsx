@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -24,6 +25,7 @@ export default function MatchesPage() {
       try {
         const response = await axios.get(`/api/matches/${user.id}`)
         setMatches(response.data)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error('Failed to load matches')
       } finally {

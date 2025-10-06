@@ -9,7 +9,34 @@ import { WORKING_STYLE_LABELS, COLLABORATION_PREF_LABELS, STARTUP_STAGE_LABELS, 
 interface ProfileDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  profile: any
+  profile: {
+    avatarUrl?: string
+    name: string
+    location?: string
+    currentRole?: string
+    yearsExperience?: number
+    description?: string
+    workingStyle?: string
+    collaborationPref?: string
+    personalityTags?: string[]
+    contactInfo?: {
+      email?: string
+    }
+    pastProjects?: {
+      id: string | number
+      name: string
+      description?: string
+      link?: string
+    }[]
+    skills?: string[]
+    domainExpertise?: string[]
+    startupInfo?: {
+      startupStage?: string
+      startupCommitment?: string
+      startupGoals?: string
+      lookingFor?: string[]
+    }
+  } | null
 }
 
 export default function ProfileDialog({ open, onOpenChange, profile }: ProfileDialogProps) {
@@ -118,7 +145,7 @@ export default function ProfileDialog({ open, onOpenChange, profile }: ProfileDi
               <div>
                 <span className="text-xs text-neutral-400 mb-2 block font-semibold">Past Projects</span>
                 <div className="space-y-3">
-                  {profile.pastProjects.map((project: any) => (
+                  {profile.pastProjects.map((project) => (
                     <div key={project.id} className="border border-neutral-800 rounded-lg p-3">
                       <h4 className="font-semibold text-white">{project.name}</h4>
                       <p className="text-neutral-300 text-sm mt-1">{project.description}</p>
