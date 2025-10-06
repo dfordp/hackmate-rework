@@ -139,6 +139,10 @@ import { extractFormSubmitErrorMessages } from "@/lib/utils"
     const userId = user?.id;
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
+    const email = typeof user?.primaryEmailAddress === "string"
+      ? user.primaryEmailAddress
+      : user?.primaryEmailAddress?.emailAddress ?? "";
+
 
     useEffect(() => {
       // Check if user exists and has completed onboarding
@@ -180,7 +184,7 @@ import { extractFormSubmitErrorMessages } from "@/lib/utils"
         skills: [],
         pastProjects: [],
         contactInfo: {
-          email: "",
+          email: email,
           twitterUrl: "",
           linkedinUrl: "",
           scheduleUrl: ""
