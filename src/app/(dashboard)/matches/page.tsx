@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -13,9 +12,27 @@ import ProfileDialog from '@/components/ui/profile-dialog'
 
 export default function MatchesPage() {
   const { user } = useUser()
-  const [matches, setMatches] = useState<any[]>([])
+
+  type Profile = {
+    id: string
+    name: string
+    avatarUrl?: string
+    location?: string
+    currentRole?: string
+    yearsExperience?: number
+    skills?: string[]
+  }
+
+  type Match = {
+    id: string
+    mutual: boolean
+    profile: Profile
+    // add other fields as needed
+  }
+
+  const [matches, setMatches] = useState<Match[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedProfile, setSelectedProfile] = useState<any>(null)
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => {
