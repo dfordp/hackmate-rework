@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 'use client'
 
 import { motion } from 'framer-motion'
@@ -27,6 +27,7 @@ import {
   STARTUP_STAGE_LABELS,
   COMMITMENT_LEVEL_LABELS,
 } from '../../constants'
+import { ProfileCardProps } from '@/types'
 
 const mPlus1p = M_PLUS_1p({
   subsets: ['latin'],

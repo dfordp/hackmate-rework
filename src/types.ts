@@ -1,3 +1,5 @@
+import { MotionValue } from "framer-motion"
+
 export type WorkingStyle = 'ASYNC' | 'REAL_TIME' | 'FLEXIBLE' | 'STRUCTURED'
 export type CollaborationPref = 'REMOTE' | 'HYBRID' | 'IN_PERSON' | 'DOESNT_MATTER'
 export type StartupStage = 'IDEA' | 'MVP' | 'SCALING' | 'EXITED'
@@ -66,11 +68,11 @@ export type FilterOptions = {
 
 export type ProfileCardProps = {
   activeUser: User | null
-  x: any
-  rotate: any
-  opacity: any
-  likeOpacity: any
-  nopeOpacity: any
+  x: MotionValue<number>
+  rotate: MotionValue<number>
+  opacity: MotionValue<number>
+  likeOpacity: MotionValue<number>
+  nopeOpacity: MotionValue<number>
   handleLike: () => void
   handlePass: () => void
 }
