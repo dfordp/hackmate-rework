@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 import geohash from 'ngeohash';
+
 import prismaClient from '@/lib/prsimadb';
 
 export async function GET(
@@ -40,7 +42,10 @@ export async function GET(
 
     return NextResponse.json(location);
   } catch (error) {
-    console.error('Error fetching location:', error);
+    logger.error('Error fetching location', {
+      error: (error as Error).message,
+      endpoint: '/api/user/[id]/location'
+    });
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
@@ -111,7 +116,10 @@ export async function POST(
 
     return NextResponse.json(location, { status: 201 });
   } catch (error) {
-    console.error('Error creating location:', error);
+    logger.error('Error creating/updating location', {
+      error: (error as Error).message,
+      endpoint: '/api/user/[id]/location'
+    });
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }

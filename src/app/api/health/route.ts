@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import { redisClient } from '@/lib/redis';
 import prismaClient from '@/lib/prsimadb';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/health
@@ -35,7 +36,10 @@ export async function GET() {
       await redisClient.ping();
       healthCheck.checks.redis = 'ok';
     } catch (error) {
-      console.error('Redis health check failed:', error);
+      logger.error('Redis health check failed', { 
+        error: (error as Error).message,
+        endpoint: '/api/health'
+      });
       healthCheck.checks.redis = 'error';
       healthCheck.status = 'degraded';
     }
@@ -45,7 +49,10 @@ export async function GET() {
       await prismaClient.$queryRaw`SELECT 1`;
       healthCheck.checks.database = 'ok';
     } catch (error) {
-      console.error('Database health check failed:', error);
+      logger.error('Database health check failed', { 
+        error: (error as Error).message,
+        endpoint: '/api/health'
+      });
       healthCheck.checks.database = 'error';
       healthCheck.status = 'degraded';
     }
@@ -63,7 +70,11 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Health check error:', error);
+    logger.error('Health check endpoint failed', { 
+      error: (error as Error).message,
+      stack: (error as Error).stack,
+      endpoint: '/api/health'
+    });
     return NextResponse.json(
       { 
         status: 'error', 

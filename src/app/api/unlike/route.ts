@@ -1,19 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prismaClient from '@/lib/prsimadb';
 import { z } from 'zod';
+import { getAuth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 import { addViewedProfile, redisClient } from '@/lib/redis';
 
-// Define schema for unlike request
+// Define schema for unlike request (removed userId - comes from auth)
 const unlikeSchema = z.object({
-  userId: z.string(),
   unlikedUserId: z.string(),
 });
 
 // POST handler for registering an unlike (passing on a profile)
 export async function POST(req: NextRequest) {
   try {
+    // Get authenticated user ID
+    const { userId } = getAuth(req);
+    if (!userId) {
+      logger.securityEvent('Unauthorized unlike attempt', undefined, {
+        endpoint: '/api/unlike'
+      });
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
     const body = await req.json();
-    const { userId, unlikedUserId } = unlikeSchema.parse(body);
+    const { unlikedUserId } = unlikeSchema.parse(body);
 
     // Create a cache key for this operation to prevent duplicates
     const cacheKey = `unlike:${userId}:${unlikedUserId}`;
@@ -96,7 +106,10 @@ export async function POST(req: NextRequest) {
       });
     }
   } catch (error) {
-    console.error('Error processing unlike:', error);
+    logger.error('Error processing unlike', {
+      error: (error as Error).message,
+      endpoint: '/api/unlike'
+    });
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -106,7 +119,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: 'Failed to process unlike', message: (error as Error).message },
+      { error: 'Failed to process unlike' },
       { status: 500 }
     );
   }

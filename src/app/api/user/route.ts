@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prismaClient from '@/lib/prsimadb';
 import { z } from 'zod';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { logger } from '@/lib/logger';
 import { 
   getViewedProfiles,
   getCachedUserProfile,
@@ -292,7 +293,11 @@ export async function GET(req: NextRequest) {
     }, { headers });
 
   } catch (err) {
-    console.error(err);
+    logger.error('Failed to fetch users', { 
+      error: (err as Error).message,
+      stack: (err as Error).stack,
+      endpoint: '/api/user'
+    });
     return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
   }
 }
@@ -400,7 +405,12 @@ export async function POST(request: Request) {
       
       return NextResponse.json(user, { status: 201 });
     } catch (dbError) {
-      console.error('Database operation error:', dbError);
+      logger.error('Database operation error during user creation', { 
+        error: (dbError as Error).message,
+        stack: (dbError as Error).stack,
+        endpoint: '/api/user',
+        operation: 'create_user'
+      });
       if (dbError instanceof PrismaClientKnownRequestError && dbError.code === 'P2002') {
         return NextResponse.json({ 
           error: 'User already exists', 
@@ -410,7 +420,12 @@ export async function POST(request: Request) {
       throw dbError;
     }
   } catch (error) {
-    console.error('Error creating user:', error);
+    logger.error('Error creating user', { 
+      error: (error as Error).message,
+      stack: (error as Error).stack,
+      endpoint: '/api/user',
+      operation: 'create_user'
+    });
     
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data', details: error.errors }, { status: 400 });

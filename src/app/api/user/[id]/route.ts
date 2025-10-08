@@ -1,11 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prismaClient from '@/lib/prsimadb';
 import { z } from 'zod';
+import { getAuth } from '@clerk/nextjs/server';
 import { 
   cacheUserProfile, 
   getCachedUserProfile, 
   redisClient 
 } from '@/lib/redis';
+import { logger } from '@/lib/logger';
 
 // Define the request body schema for updates
 const userUpdateSchema = z.object({ 
@@ -42,14 +44,24 @@ const userUpdateSchema = z.object({
 });
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
 ) {
   try {
+    const { userId: authUserId } = getAuth(request);
     const userId = request.url.split('/').pop();
 
     if (!userId) {
       return new NextResponse('ID is required', { status: 400 });
     }
+
+    // Check authentication
+    if (!authUserId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    // Allow users to access their own profile or public profiles
+    // For now, we'll allow access to any profile, but you might want to restrict this
+    // based on your privacy requirements
 
     // Add caching headers
     const headers = new Headers();
@@ -103,7 +115,10 @@ export async function GET(
         
         return NextResponse.json(formattedUser, { headers });
       } catch (parseError) {
-        console.error('Error parsing cached user data:', parseError);
+        logger.error('Error parsing cached user data', {
+          error: (parseError as Error).message,
+          endpoint: '/api/user/[id]'
+        });
         // Continue to fetch from database if parsing fails
       }
     }
@@ -150,21 +165,35 @@ export async function GET(
     
     return NextResponse.json(user, { headers });
   } catch (error) {
-    console.error('Error fetching user:', error);
+    logger.error('Error fetching user', {
+      error: (error as Error).message,
+      endpoint: '/api/user/[id]'
+    });
     return NextResponse.json(
-      { error: 'Failed to fetch user', message: (error as Error).message },
+      { error: 'Failed to fetch user' },
       { status: 500 }
     );
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
+    const { userId: authUserId } = getAuth(request);
     // Get the user ID from the URL
     const userId = request.url.split('/').pop();
     
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    }
+
+    // Check authentication
+    if (!authUserId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    // Ensure users can only update their own profile
+    if (authUserId !== userId) {
+      return NextResponse.json({ error: 'Unauthorized: You can only update your own profile' }, { status: 403 });
     }
     
     // Process as multipart form data
@@ -376,26 +405,45 @@ export async function PUT(request: Request) {
 
       return NextResponse.json(updatedUser, { status: 200 });
     } catch (dbError) {
-      console.error('Database operation error:', dbError);
+      logger.error('Database operation error during user update', {
+        error: (dbError as Error).message,
+        endpoint: '/api/user/[id]',
+        operation: 'update_user'
+      });
       throw dbError;
     }
   } catch (error) {
-    console.error('Error updating user:', error);
+    logger.error('Error updating user', {
+      error: (error as Error).message,
+      endpoint: '/api/user/[id]',
+      operation: 'update_user'
+    });
     
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data', details: error.errors }, { status: 400 });
     }
     
-    return NextResponse.json({ error: 'Failed to update user', message: (error as Error).message }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   try {
+    const { userId: authUserId } = getAuth(request);
     const userId = request.url.split('/').pop();
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    }
+
+    // Check authentication
+    if (!authUserId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    // Ensure users can only delete their own profile
+    if (authUserId !== userId) {
+      return NextResponse.json({ error: 'Unauthorized: You can only delete your own profile' }, { status: 403 });
     }
 
     // Check if user exists - try Redis first for a faster check
@@ -440,7 +488,11 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting user:', error);
-    return NextResponse.json({ error: 'Failed to delete user', message: (error as Error).message }, { status: 500 });
+    logger.error('Error deleting user', {
+      error: (error as Error).message,
+      endpoint: '/api/user/[id]',
+      operation: 'delete_user'
+    });
+    return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 });
   }
 }

@@ -1,19 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prismaClient from '@/lib/prsimadb';
 import { z } from 'zod';
+import { getAuth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 import { redisClient} from '@/lib/redis';
 
-// Define schema for like request
+// Define schema for like request (removed userId - comes from auth)
 const likeSchema = z.object({
-  userId: z.string(),
   likedUserId: z.string(),
 });
 
 // POST handler for registering a like
 export async function POST(req: NextRequest) {
   try {
+    // Get authenticated user ID
+    const { userId } = getAuth(req);
+    if (!userId) {
+      logger.securityEvent('Unauthorized like attempt', undefined, {
+        endpoint: '/api/like'
+      });
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
     const body = await req.json();
-    const { userId, likedUserId } = likeSchema.parse(body);
+    const { likedUserId } = likeSchema.parse(body);
 
     // Prevent liking oneself
     if (userId === likedUserId) {
@@ -145,7 +155,10 @@ export async function POST(req: NextRequest) {
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error processing like:', error);
+    logger.error('Error processing like', {
+      error: (error as Error).message,
+      endpoint: '/api/like'
+    });
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -155,7 +168,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: 'Failed to process like', message: (error as Error).message },
+      { error: 'Failed to process like' },
       { status: 500 }
     );
   }
@@ -225,9 +238,12 @@ export async function DELETE(req: NextRequest) {
       message: 'Like removed successfully',
     });
   } catch (error) {
-    console.error('Error removing like:', error);
+    logger.error('Error removing like', {
+      error: (error as Error).message,
+      endpoint: '/api/like'
+    });
     return NextResponse.json(
-      { error: 'Failed to remove like', message: (error as Error).message },
+      { error: 'Failed to remove like' },
       { status: 500 }
     );
   }

@@ -277,7 +277,8 @@ import { extractFormSubmitErrorMessages } from "@/lib/utils"
           }
 
           toast.error(message);
-          console.error(error); // Log full error for debugging
+          // Log error safely without exposing sensitive data
+          console.error('Onboarding error:', error instanceof Error ? error.message : 'Unknown error');
         } finally {
         setIsSubmitting(false)
       }

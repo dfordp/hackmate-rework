@@ -4,6 +4,7 @@ import { useMotionValue, useTransform } from 'framer-motion'
 import axios from 'axios'
 import { User } from '../types'
 import { useUser } from '@clerk/nextjs'
+import { logger } from '@/lib/logger'
 
 export function useSwipeActions(
   activeUser: User | null,
@@ -63,7 +64,12 @@ export function useSwipeActions(
       }, 300)
       
     } catch (error) {
-      console.error('Error liking profile:', error)
+      logger.error('Error liking profile', { 
+        error: (error as Error).message,
+        userId: user?.id,
+        likedUserId: activeUser?.id,
+        action: 'like'
+      })
       x.set(0) // Reset on error
     }
   }
@@ -96,7 +102,12 @@ export function useSwipeActions(
       }, 300)
       
     } catch (error) {
-      console.error('Error passing profile:', error)
+      logger.error('Error passing profile', { 
+        error: (error as Error).message,
+        userId: user?.id,
+        passedUserId: activeUser?.id,
+        action: 'pass'
+      })
       x.set(0) // Reset on error
     }
   }

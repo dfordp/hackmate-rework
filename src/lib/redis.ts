@@ -2,13 +2,14 @@
 //@ts-nocheck
 import { createClient } from 'redis';
 import type { User } from '@prisma/client';
+import { logger } from './logger';
 
 // Create Redis client (don't connect yet)
 const redisClient = createClient({
   url: process.env.REDIS_URL
 });
 
-redisClient.on('error', (err) => console.error('Redis error:', err));
+redisClient.on('error', (err) => logger.error('Redis connection error', { error: err.message }));
 
 // Connection state tracking
 let isConnecting = false;
@@ -18,7 +19,7 @@ let isConnected = false;
 async function ensureRedisConnection() {
   // Skip connection during build time
   if (process.env.NEXT_PHASE === 'phase-production-build') {
-    console.log('Skipping Redis connection during build phase');
+    logger.debug('Skipping Redis connection during build phase');
     return false;
   }
 
@@ -36,10 +37,10 @@ async function ensureRedisConnection() {
     isConnecting = true;
     await redisClient.connect();
     isConnected = true;
-    console.log('Redis connected successfully');
+    logger.info('Redis connected successfully');
     return true;
   } catch (error) {
-    console.error('Failed to connect to Redis:', error);
+    logger.error('Failed to connect to Redis', { error: (error as Error).message });
     isConnected = false;
     return false;
   } finally {
