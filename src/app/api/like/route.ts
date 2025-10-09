@@ -177,15 +177,14 @@ export async function POST(req: NextRequest) {
 // DELETE handler for removing a like
 export async function DELETE(req: NextRequest) {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
     const url = new URL(req.url);
-    const userId = url.searchParams.get('userId');
     const likedUserId = url.searchParams.get('likedUserId');
-    
-    if (!userId || !likedUserId) {
-      return NextResponse.json(
-        { error: 'Both userId and likedUserId are required' },
-        { status: 400 }
-      );
+    if (!likedUserId) {
+      return NextResponse.json({ error: 'likedUserId is required' }, { status: 400 });
     }
     
     // Find the like to delete

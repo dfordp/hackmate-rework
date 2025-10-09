@@ -3,6 +3,7 @@ import prismaClient from '@/lib/prsimadb';
 import { z } from 'zod';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { logger } from '@/lib/logger';
+import { getAuth } from '@clerk/nextjs/server';
 import { 
   getViewedProfiles,
   getCachedUserProfile,
@@ -303,8 +304,12 @@ export async function GET(req: NextRequest) {
 }
 
 // POST handler for creating a new user
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const { userId: authUserId } = getAuth(request);
+    if (!authUserId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
     // Process as multipart form data
     const formData = await request.formData();
     
@@ -313,6 +318,10 @@ export async function POST(request: Request) {
     
     // Validate user data
     const validatedData = userCreateSchema.parse(userData);
+
+    if (validatedData.id !== authUserId) {
+      return NextResponse.json({ error: 'ID mismatch' }, { status: 403 });
+    }
 
     const id = validatedData.id;
 
