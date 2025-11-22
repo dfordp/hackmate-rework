@@ -91,26 +91,6 @@ export default function MatchesPage() {
         transition={{ delay: 0.1 }}
         className="mb-8"
       >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            
-            <div>
-              <h2 className="text-xl font-bold text-white" style={mPlus1p.style}>
-                Mutual Matches
-              </h2>
-              <p className="text-sm text-neutral-400">
-                {mutualMatches.length} {mutualMatches.length === 1 ? 'match' : 'matches'}
-              </p>
-            </div>
-          </div>
-          <Badge 
-            variant="secondary" 
-            className="bg-blue-900/40 text-blue-400/90 border border-blue-500/30 px-4 py-1.5 text-sm font-semibold"
-          >
-            {mutualMatches.length}
-          </Badge>
-        </div>
-
         {mutualMatches.length === 0 ? (
           <motion.div 
             initial={{ scale: 0.95, opacity: 0 }}
@@ -137,7 +117,7 @@ export default function MatchesPage() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Card 
-                  className="group bg-gradient-to-br from-neutral-900 to-neutral-950 border-green-800/30 cursor-pointer hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300 overflow-hidden"
+                  className="group bg-gradient-to-br from-neutral-900 to-neutral-950 border-blue-800/30 cursor-pointer hover:border-blue-800/40 transition-all duration-200 overflow-hidden"
                   onClick={() => {
                     setSelectedProfile(match.profile)
                     setDialogOpen(true)
@@ -153,21 +133,21 @@ export default function MatchesPage() {
                             alt={match.profile.name}
                             width={64}
                             height={64}
-                            className="w-16 h-16 rounded-xl object-cover border-2 border-green-500/30 group-hover:border-green-500/50 transition-colors"
+                            className="w-16 h-16 rounded-xl object-cover border-2 border-blue-500/30"
                           />
                         ) : (
-                          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/30 group-hover:border-green-500/50 flex items-center justify-center transition-colors">
-                            <span className="text-green-400 font-bold text-xl" style={mPlus1p.style}>
+                          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-emerald-500/20 border-2 border-blue-500/30 flex items-center justify-center">
+                            <span className="text-blue-400 font-bold text-xl" style={mPlus1p.style}>
                               {match.profile.name.charAt(0)}
                             </span>
                           </div>
                         )}
-                        <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-neutral-900">
+                        <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1 border-2 border-neutral-900">
                           <Heart className="h-3 w-3 text-white fill-white" />
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-white text-lg truncate group-hover:text-green-400 transition-colors" style={mPlus1p.style}>
+                        <h3 className="font-bold text-white text-lg truncate" style={mPlus1p.style}>
                           {match.profile.name}
                         </h3>
                         <div className="flex items-center text-sm text-neutral-400 mt-1">
@@ -195,7 +175,7 @@ export default function MatchesPage() {
                             <Badge 
                               key={skill} 
                               variant="secondary" 
-                              className="text-xs bg-green-900/40 text-green-400 border border-green-500/30 hover:bg-green-900/60 transition-colors"
+                              className="text-xs bg-blue-900/40 text-blue-400 border border-blue-500/30 hover:bg-blue-900/60 transition-colors"
                             >
                               {skill}
                             </Badge>
@@ -213,7 +193,7 @@ export default function MatchesPage() {
                     )}
 
                     {/* Action hint */}
-                    <div className="flex items-center justify-center text-xs text-neutral-500 pt-2 border-t border-neutral-800/50 group-hover:text-green-400 transition-colors">
+                    <div className="flex items-center justify-center text-xs text-neutral-500 pt-2 border-t border-neutral-800/50">
                       <MessageCircle className="h-3.5 w-3.5 mr-1.5" />
                       <span>Click to view full profile</span>
                     </div>
