@@ -5,10 +5,18 @@ import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Heart, MapPin, Briefcase, Users } from 'lucide-react'
+import { Heart, MapPin, Briefcase, Users, MessageCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import LoadingState from '@/components/ui/loading-state'
 import ProfileDialog from '@/components/ui/profile-dialog'
+import { M_PLUS_1p } from 'next/font/google'
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+
+const mPlus1p = M_PLUS_1p({
+  subsets: ['latin'],
+  weight: ['500', '700']
+})
 
 export default function MatchesPage() {
   const { user } = useUser()
@@ -27,7 +35,7 @@ export default function MatchesPage() {
     id: string
     mutual: boolean
     profile: Profile
-    // add other fields as needed
+    createdAt?: string
   }
 
   const [matches, setMatches] = useState<Match[]>([])
@@ -58,87 +66,164 @@ export default function MatchesPage() {
   const mutualMatches = matches.filter(m => m.mutual)
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Heart className="h-6 w-6 text-red-400" />
-        <h1 className="text-2xl font-bold text-white">Matches & Likes</h1>
-      </div>
+    <div className="container mx-auto px-4 py-6 max-w-[1350px]">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="flex items-center gap-3 mb-2">
+          
+          <h1 className="text-3xl font-bold text-white" style={mPlus1p.style}>
+            Matches & Likes
+          </h1>
+        </div>
+        <p className="text-neutral-400">
+          Connect with people who liked you back
+        </p>
+      </motion.div>
 
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <Users className="h-5 w-5 text-green-400" />
-          <h2 className="text-xl font-semibold text-white">Mutual Matches</h2>
-          <Badge variant="secondary" className="bg-green-900/40 text-green-400">
+      {/* Mutual Matches Section */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        className="mb-8"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            
+            <div>
+              <h2 className="text-xl font-bold text-white" style={mPlus1p.style}>
+                Mutual Matches
+              </h2>
+              <p className="text-sm text-neutral-400">
+                {mutualMatches.length} {mutualMatches.length === 1 ? 'match' : 'matches'}
+              </p>
+            </div>
+          </div>
+          <Badge 
+            variant="secondary" 
+            className="bg-blue-900/40 text-blue-400/90 border border-blue-500/30 px-4 py-1.5 text-sm font-semibold"
+          >
             {mutualMatches.length}
           </Badge>
         </div>
 
         {mutualMatches.length === 0 ? (
-          <div className="text-center py-8 bg-neutral-900/50 rounded-lg border border-neutral-800">
-            <Users className="h-12 w-12 text-neutral-600 mx-auto mb-2" />
-            <p className="text-neutral-400">No mutual matches yet</p>
-          </div>
+          <motion.div 
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="text-center py-16 bg-gradient-to-br from-neutral-900/50 to-neutral-950/50 rounded-2xl border border-neutral-800/50 backdrop-blur-sm"
+          >
+            <div className="mb-4 inline-flex p-4 rounded-full bg-neutral-800/50">
+              <Users className="h-12 w-12 text-neutral-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2" style={mPlus1p.style}>
+              No mutual matches yet
+            </h3>
+            <p className="text-neutral-400 max-w-md mx-auto">
+              Keep swiping! When someone likes you back, they&apos;ll appear here
+            </p>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mutualMatches.map((match) => (
-              <Card 
-                key={match.id} 
-                className="bg-neutral-900 border-green-800/30 cursor-pointer hover:border-green-600/50 transition-colors"
-                onClick={() => {
-                  setSelectedProfile(match.profile)
-                  setDialogOpen(true)
-                }}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {mutualMatches.map((match, index) => (
+              <motion.div
+                key={match.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
               >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    {match.profile.avatarUrl ? (
-                      <img
-                        src={match.profile.avatarUrl}
-                        alt={match.profile.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                        <span className="text-green-400 font-semibold">
-                          {match.profile.name.charAt(0)}
-                        </span>
+                <Card 
+                  className="group bg-gradient-to-br from-neutral-900 to-neutral-950 border-green-800/30 cursor-pointer hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300 overflow-hidden"
+                  onClick={() => {
+                    setSelectedProfile(match.profile)
+                    setDialogOpen(true)
+                  }}
+                >
+                  {/* Avatar and Name Header */}
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start gap-4">
+                      <div className="relative">
+                        {match.profile.avatarUrl ? (
+                          <Image
+                            src={match.profile.avatarUrl}
+                            alt={match.profile.name}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 rounded-xl object-cover border-2 border-green-500/30 group-hover:border-green-500/50 transition-colors"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/30 group-hover:border-green-500/50 flex items-center justify-center transition-colors">
+                            <span className="text-green-400 font-bold text-xl" style={mPlus1p.style}>
+                              {match.profile.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                        <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-neutral-900">
+                          <Heart className="h-3 w-3 text-white fill-white" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-white text-lg truncate group-hover:text-green-400 transition-colors" style={mPlus1p.style}>
+                          {match.profile.name}
+                        </h3>
+                        <div className="flex items-center text-sm text-neutral-400 mt-1">
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                          <span className="truncate">{match.profile.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="pt-0 space-y-4">
+                    {/* Role and Experience */}
+                    <div className="flex items-center text-sm text-neutral-300 bg-neutral-800/50 rounded-lg px-3 py-2.5 border border-neutral-700/50">
+                      <Briefcase className="h-4 w-4 mr-2 text-blue-400 flex-shrink-0" />
+                      <span className="truncate">
+                        {match.profile.currentRole} • {match.profile.yearsExperience}+ yrs
+                      </span>
+                    </div>
+                    
+                    {/* Skills */}
+                    {match.profile.skills && match.profile.skills.length > 0 && (
+                      <div>
+                        <div className="flex flex-wrap gap-2">
+                          {match.profile.skills.slice(0, 3).map((skill: string) => (
+                            <Badge 
+                              key={skill} 
+                              variant="secondary" 
+                              className="text-xs bg-green-900/40 text-green-400 border border-green-500/30 hover:bg-green-900/60 transition-colors"
+                            >
+                              {skill}
+                            </Badge>
+                          ))}
+                          {match.profile.skills.length > 3 && (
+                            <Badge 
+                              variant="outline" 
+                              className="text-xs text-neutral-400 border-neutral-600"
+                            >
+                              +{match.profile.skills.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     )}
-                    <div>
-                      <h3 className="font-semibold text-white">{match.profile.name}</h3>
-                      <div className="flex items-center text-sm text-neutral-400">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        {match.profile.location}
-                      </div>
+
+                    {/* Action hint */}
+                    <div className="flex items-center justify-center text-xs text-neutral-500 pt-2 border-t border-neutral-800/50 group-hover:text-green-400 transition-colors">
+                      <MessageCircle className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Click to view full profile</span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-center text-sm text-neutral-400 mb-3">
-                    <Briefcase className="h-3 w-3 mr-1" />
-                    {match.profile.currentRole} • {match.profile.yearsExperience}+ yrs
-                  </div>
-                  
-                  {match.profile.skills && match.profile.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {match.profile.skills.slice(0, 3).map((skill: string) => (
-                        <Badge key={skill} variant="secondary" className="text-xs bg-green-900/40 text-green-400">
-                          {skill}
-                        </Badge>
-                      ))}
-                      {match.profile.skills.length > 3 && (
-                        <Badge variant="outline" className="text-xs text-neutral-400">
-                          +{match.profile.skills.length - 3}
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
 
       <ProfileDialog 
         open={dialogOpen}
