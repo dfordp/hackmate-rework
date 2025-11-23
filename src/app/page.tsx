@@ -135,7 +135,7 @@ export default function LandingPage() {
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
               Made by{' '}
               <a
-                href="https://dilpreetgrover.is-a.dev/"
+                href="https://dilpreetgrover.me/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-blue-500"

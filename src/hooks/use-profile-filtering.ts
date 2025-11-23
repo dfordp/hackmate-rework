@@ -16,6 +16,8 @@ export function useProfileFiltering(filters: FilterOptions) {
   const [hasMore, setHasMore] = useState(true)
   const [mutualMatchIds, setMutualMatchIds] = useState<string[]>([])
   const [viewedProfileIds, setViewedProfileIds] = useState<string[]>([])
+  const [incomingMatchIds, setIncomingMatchIds] = useState<string[]>([])
+
 
   // prevent duplicate load-more requests
   const loadingRef = useRef(false)
@@ -58,12 +60,30 @@ export function useProfileFiltering(filters: FilterOptions) {
   }, [clerkUser?.id])
 
   /** ─────────────────────────────
+   * Fetch incoming match requests (they liked you, you haven't liked them back)
+   */
+  const fetchIncomingMatches = useCallback(async () => {
+    if (!clerkUser?.id) return
+    try {
+      const { data } = await axios.get('/api/matches/incoming', {
+        params: { userId: clerkUser.id },
+      })
+      if (data?.matches) {
+        const ids = data.matches.map((m: { userAId: string }) => m.userAId)
+        setIncomingMatchIds(ids)
+      }
+    } catch (err) {
+      console.error('Error fetching incoming matches:', err)
+    }
+  }, [clerkUser?.id])  
+
+  /** ─────────────────────────────
    * Fetch both matches + viewed once per user
    */
   useEffect(() => {
-    if (!clerkUser?.id) return
-    Promise.all([fetchMutualMatches(), fetchViewedProfiles()])
-  }, [clerkUser?.id, fetchMutualMatches, fetchViewedProfiles])
+  if (!clerkUser?.id) return
+  Promise.all([fetchMutualMatches(), fetchViewedProfiles(), fetchIncomingMatches()])
+}, [clerkUser?.id, fetchMutualMatches, fetchViewedProfiles, fetchIncomingMatches])
 
   /** ─────────────────────────────
    * Stable filter key (stringified params)
@@ -92,13 +112,17 @@ export function useProfileFiltering(filters: FilterOptions) {
     }
 
     if (mutualMatchIds.length) params.append('excludeUserIds', mutualMatchIds.join(','))
+    if (incomingMatchIds.length) {
+      const existing = params.get('excludeUserIds')?.split(',') || []
+      params.set('excludeUserIds', [...new Set([...existing, ...incomingMatchIds])].join(','))
+    }
     if (viewedProfileIds.length) {
       const existing = params.get('excludeUserIds')?.split(',') || []
       params.set('excludeUserIds', [...new Set([...existing, ...viewedProfileIds])].join(','))
     }
 
     return params.toString()
-  }, [clerkUser?.id, filters, mutualMatchIds, viewedProfileIds])
+  }, [clerkUser?.id, filters, mutualMatchIds, incomingMatchIds, viewedProfileIds])
 
   /** ─────────────────────────────
    * Fetch users
@@ -240,5 +264,7 @@ export function useProfileFiltering(filters: FilterOptions) {
     refreshFilteredUsers,
     viewedProfileIds,
     viewCurrentProfile,
+    incomingMatchIds,
+    setIncomingMatchIds
   }
 }
