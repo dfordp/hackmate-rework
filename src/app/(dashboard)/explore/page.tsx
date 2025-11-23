@@ -86,7 +86,9 @@ export default function Explore() {
     refreshFilteredUsers,
     resetViewedProfiles,
     isLoading: isLoadingProfiles,
-    viewCurrentProfile
+    viewCurrentProfile,
+    incomingMatchIds,
+    setIncomingMatchIds
   } = useProfileFiltering({
     ...filters,
     userCoordinates: userCoordinates
@@ -132,7 +134,9 @@ export default function Explore() {
     setMatches,
     setSelectedMatch,
     setMatchDialogOpen,
-    viewCurrentProfile
+    viewCurrentProfile,
+    incomingMatchIds,
+    setIncomingMatchIds
   )
 
   // Render logic
