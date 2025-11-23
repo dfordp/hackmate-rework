@@ -198,12 +198,11 @@ export default function Profile() {
               {user.description && (
                 <div className="px-6 border-t border-gray-800 pt-4 pb-3 mt-1">
                   <h3 className="font-semibold text-white/85 mb-1">About</h3>
-                  <p className="text-neutral-300 text-sm whitespace-pre-wrap">{user.description}</p>
+                  <p className="text-neutral-300 text-sm break-words whitespace-pre-wrap">{user.description}</p>
                 </div>
               )}
 
               <CardContent className="space-y-4 pt-3">
-                {/* Personality */}
                 {user.personalityTags?.length > 0 && (
                   <div>
                     <h3 className="font-semibold text-white/85 mb-1">Personality Traits</h3>

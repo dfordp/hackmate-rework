@@ -1,7 +1,6 @@
-
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, animate } from 'framer-motion'
 import {
   Card,
   CardContent,
@@ -28,6 +27,7 @@ import {
   COMMITMENT_LEVEL_LABELS,
 } from '../../constants'
 import { ProfileCardProps } from '@/types'
+import { useState } from 'react'
 
 const mPlus1p = M_PLUS_1p({
   subsets: ['latin'],
@@ -44,7 +44,34 @@ export default function ProfileCard({
   handleLike,
   handlePass,
 }: ProfileCardProps) {
+  const [isAnimating, setIsAnimating] = useState(false)
+
   if (!activeUser) return null
+
+  const triggerSwipeAnimation = (direction: 'like' | 'pass') => {
+    if (isAnimating) return
+    
+    setIsAnimating(true)
+    const targetX = direction === 'like' ? 100 : -100
+    const targetRotate = direction === 'like' ? 20 : -20
+
+    animate(x, targetX, { type: 'spring', stiffness: 200, damping: 20 })
+    animate(rotate, targetRotate, { type: 'spring', stiffness: 200, damping: 20 })
+    animate(opacity, 0, { delay: 0.2, type: 'spring', stiffness: 200, damping: 20 })
+
+    setTimeout(() => {
+      if (direction === 'like') {
+        handleLike()
+      } else {
+        handlePass()
+      }
+      // Reset animation values for next card
+      animate(x, 0, { duration: 0 })
+      animate(rotate, 0, { duration: 0 })
+      animate(opacity, 1, { duration: 0 })
+      setIsAnimating(false)
+    }, 400)
+  }
 
   return (
     <div className="relative w-full h-auto select-none">
@@ -54,9 +81,12 @@ export default function ProfileCard({
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.7}
         onDragEnd={(_, info) => {
-          if (info.offset.x > 100) handleLike()
-          else if (info.offset.x < -100) handlePass()
-          else x.set(0)
+          if (info.offset.x > 100) triggerSwipeAnimation('like')
+          else if (info.offset.x < -100) triggerSwipeAnimation('pass')
+          else {
+            animate(x, 0, { type: 'spring', stiffness: 300, damping: 30 })
+            animate(rotate, 0, { type: 'spring', stiffness: 300, damping: 30 })
+          }
         }}
         className="cursor-grab active:cursor-grabbing"
       >
@@ -267,15 +297,17 @@ export default function ProfileCard({
             <Button
               size="icon"
               variant="outline"
-              className="h-14 w-14 rounded-full bg-neutral-950 border-red-300/30 text-red-400 shadow-md hover:bg-red-900/30 hover:text-red-400 hover:border-red-400"
-              onClick={handlePass}
+              className="h-14 w-14 rounded-full bg-neutral-950 border-red-300/30 text-red-400 shadow-md hover:bg-red-900/30 hover:text-red-400 hover:border-red-400 transition-all"
+              onClick={() => triggerSwipeAnimation('pass')}
+              disabled={isAnimating}
             >
               <X className="h-6 w-6" />
             </Button>
             <Button
               size="icon"
-              className="h-14 w-14 rounded-full bg-blue-500/40 text-white/90 font-bold shadow-md hover:bg-green-600 transition-colors"
-              onClick={handleLike}
+              className="h-14 w-14 rounded-full bg-blue-500/40 text-white/90 font-bold shadow-md hover:bg-green-600 transition-all"
+              onClick={() => triggerSwipeAnimation('like')}
+              disabled={isAnimating}
             >
               <Heart className="h-6 w-6" />
             </Button>
