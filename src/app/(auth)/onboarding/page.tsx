@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useFieldArray, useForm, UseFormReturn, FieldArrayWithId } from "react-hook-form"
 import * as z from "zod"
 import axios from "axios"
 import { useEffect, useState } from "react"
@@ -187,7 +187,7 @@ export default function OnboardingForm() {
 
   const handleNext = async () => {
     const stepFields = getStepFields(step)
-    const isValid = await form.trigger(stepFields as any)
+    const isValid = await form.trigger(stepFields as (keyof FormValues)[])
     if (isValid) {
       setStep(Math.min(STEPS.length, step + 1))
     }
@@ -366,7 +366,7 @@ export default function OnboardingForm() {
 }
 
 // Step Components
-function Step1Form({ form }: { form: any }) {
+function Step1Form({ form }: { form: UseFormReturn<FormValues> }) {
   return (
     <div className="space-y-6">
       <FormField
@@ -408,8 +408,7 @@ function Step1Form({ form }: { form: any }) {
   )
 }
 
-function Step2Form({ form }: { form: any }) {
-  const avatarValue = form.watch('avatar')
+function Step2Form({ form }: { form: UseFormReturn<FormValues> }) {
 
   return (
     <div className="space-y-6">
@@ -469,7 +468,7 @@ function Step2Form({ form }: { form: any }) {
   )
 }
 
-function Step3Form({ form }: { form: any }) {
+function Step3Form({ form }: { form: UseFormReturn<FormValues> }) {
   return (
     <div className="space-y-6">
       <FormField
@@ -560,7 +559,7 @@ function Step3Form({ form }: { form: any }) {
   )
 }
 
-function Step4Form({ form, personalityOptions, domainOptions, skillOptions }: { form: any; personalityOptions: string[]; domainOptions: string[]; skillOptions: string[] }) {
+function Step4Form({ form, personalityOptions, domainOptions, skillOptions }: { form: UseFormReturn<FormValues>; personalityOptions: string[]; domainOptions: string[]; skillOptions: string[] }) {
   return (
     <div className="space-y-8">
       <FormField
@@ -668,7 +667,7 @@ function Step4Form({ form, personalityOptions, domainOptions, skillOptions }: { 
   )
 }
 
-function Step5Form({ form }: { form: any }) {
+function Step5Form({ form }: { form: UseFormReturn<FormValues> }) {
   return (
     <div className="space-y-6">
       <FormField
@@ -753,7 +752,8 @@ function Step5Form({ form }: { form: any }) {
   )
 }
 
-function Step6Form({ form, fields, append, remove }: { form: any; fields: any; append: any; remove: any }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function Step6Form({ form, fields, append, remove }: { form: UseFormReturn<FormValues>; fields: FieldArrayWithId<FormValues, "pastProjects", "id">[]; append: any; remove: any }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -772,11 +772,11 @@ function Step6Form({ form, fields, append, remove }: { form: any; fields: any; a
 
       {fields.length === 0 ? (
         <div className="p-6 border border-dashed border-gray-700 rounded-lg text-center">
-          <p className="text-gray-400">No projects added yet. Click "Add Project" to get started!</p>
+          <p className="text-gray-400">No projects added yet. Click &quot;Add Project&quot; to get started!</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {fields.map((field: any, index: number) => (
+          {fields.map((field: FieldArrayWithId<FormValues, "pastProjects", "id">, index: number) => (
             <div key={field.id} className="p-5 border border-gray-700 rounded-lg bg-neutral-950 space-y-4">
               <div className="flex justify-between items-start mb-4">
                 <span className="text-sm text-gray-500 font-semibold">Project {index + 1}</span>
@@ -851,7 +851,7 @@ function Step6Form({ form, fields, append, remove }: { form: any; fields: any; a
   )
 }
 
-function Step7Form({ form, skillOptions }: { form: any; skillOptions: string[] }) {
+function Step7Form({ form, skillOptions }: { form: UseFormReturn<FormValues>; skillOptions: string[] }) {
   return (
     <div className="space-y-8">
       <FormField

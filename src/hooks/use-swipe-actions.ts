@@ -38,12 +38,6 @@ export function useSwipeActions(
       // Check if this is a mutual match (they already liked you)
       const isMutualMatch = incomingMatchIds.includes(activeUser.id)
 
-      // Call the API to register the like
-      await axios.post('/api/like', {
-        userId: user?.id,
-        likedUserId: activeUser.id
-      })
-
       // If it's a mutual match, remove from incoming matches
       if (isMutualMatch) {
         setIncomingMatchIds(incomingMatchIds.filter(id => id !== activeUser.id))
@@ -51,6 +45,14 @@ export function useSwipeActions(
         setSelectedMatch(activeUser)
         setMatchDialogOpen(true)
       }
+
+      // Call the API to register the like
+      await axios.post('/api/like', {
+        userId: user?.id,
+        likedUserId: activeUser.id
+      })
+
+
 
       // Animate card off screen
       x.set(500)
