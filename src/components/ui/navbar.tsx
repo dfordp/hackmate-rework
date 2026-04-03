@@ -10,7 +10,7 @@ const chakraPetch = Chakra_Petch({
   weight: ['400', '500', '600', '700']
 })
 
-export const Navbar = ({ showSignIn = true }: { showSignIn?: boolean }) => {
+export const Navbar = () => {
   return (
     <div className="w-full z-40 flex justify-center">
       <nav 
