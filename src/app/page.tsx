@@ -8,7 +8,7 @@ import { Navbar } from "@/components/ui/navbar"
 import { DevelopmentPauseBanner } from "@/components/ui/development-pause-banner"
 import Spline from '@splinetool/react-spline'
 import { M_PLUS_1p } from "next/font/google"
-import FixedBadges from "@/components/ui/fixed-badges"
+// import FixedBadges from "@/components/ui/fixed-badges"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import HowItWorks from "@/components/ui/how-it-works"
 import Link from "next/link"
@@ -54,7 +54,7 @@ export default function LandingPage() {
       
       <div className="min-h-screen flex flex-col">
       {/* Fixed badges for landing page only */}
-      <FixedBadges />
+      {/* <FixedBadges /> */}
       
       {/* Hero Section */}
       <main>
