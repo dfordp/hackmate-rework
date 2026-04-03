@@ -5,6 +5,7 @@ import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { Zap} from "lucide-react"
 import { Navbar } from "@/components/ui/navbar"
+import { DevelopmentPauseBanner } from "@/components/ui/development-pause-banner"
 import Spline from '@splinetool/react-spline'
 import { M_PLUS_1p } from "next/font/google"
 import FixedBadges from "@/components/ui/fixed-badges"
@@ -47,9 +48,11 @@ export default function LandingPage() {
 
   
   return (
-    <div className="min-h-screen flex flex-col pt-11 md:pt-2 bg-black">
+    <div className="flex flex-col bg-black">
+      <DevelopmentPauseBanner />
       <Navbar />
       
+      <div className="min-h-screen flex flex-col">
       {/* Fixed badges for landing page only */}
       <FixedBadges />
       
@@ -120,6 +123,8 @@ export default function LandingPage() {
 
       <Testimonials />
 
+      </div>
+
       {/* Footer */}
       <footer className="py-8 border-t border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4">
@@ -141,15 +146,6 @@ export default function LandingPage() {
                 className="underline hover:text-blue-500"
               >
                 Dilpreet Grover
-              </a>
-              {' '}and{' '}
-              <a
-                href="https://www.anantx.dev/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-blue-500"
-              >
-                Anant Kumar Sharma
               </a>
             </div>
             {/* All rights reserved */}
