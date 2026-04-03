@@ -11,7 +11,7 @@ export const DevelopmentPauseBanner = () => {
   return (
     <div className="w-full bg-yellow-400 text-gray-900 px-4 py-4 flex items-center justify-center gap-4 relative z-50">
       <div className="text-center text-sm md:text-base font-semibold flex-1">
-        🔬 App development has been paused while we complete an experiment.{' '}
+        🔬 App development has been paused as the experiment has been completed.{' '}
         <a 
           href="https://www.dilpreetgrover.me/projects/hackmate"
           target="_blank" 
