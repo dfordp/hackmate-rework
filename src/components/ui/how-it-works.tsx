@@ -8,24 +8,25 @@ const mPlus1p = M_PLUS_1p({
 })
 
 const HowItWorks = () => {
+
     const overlayCardData = [
         {
             title: "Create your profile",
             content: "Showcase your skills, experience, and what you're looking to build. Our profiles focus on what matters - your abilities and goals.",
-            imgUrl: "https://ik.imagekit.io/nduskvpccr/onboarding.png?updatedAt=1758822207227",
-            gifUrl: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmloZ256eGNqOTJwcjFnMGVpaGVnb2o5NWE0NzhodXp2eWNxcDdqcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uiqVEABnNS1wvPRpl5/giphy.gif"
+            imgUrl: "https://ik.imagekit.io/ixcfmut8e/hackmate/fwefwef.PNG",
+            gifUrl: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGV2YmR4bnN6MzJoYXJla2QzN28wdjdzYTg3N3Y0dGg5bW0yMjJrdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FvK8SzkBAzHvEAwb6r/giphy.gif"
         },
         {
             title: "Swipe to match",
             content: "Browse potential collaborators and express interest with a simple swipe. Our algorithm helps find people who match your skillset.",
-            imgUrl: "https://ik.imagekit.io/nduskvpccr/swiping.png?updatedAt=1758822206621",
-            gifUrl: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZG9qZWhsYjVuMXQ2eXVla25qZ283ZGt4cWRwb2lyN2NqeXBkdXR0bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gakq1Y9KaKhk9Wv5S7/giphy.gif"
+            imgUrl: "https://ik.imagekit.io/ixcfmut8e/hackmate/fggwfw.PNG",
+            gifUrl: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGZqN3AzMHBiNmFhMjdzN29xbzE4YWtjM2h4aXNlemdmbGs3NzZrZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TjuKLi9mwaNlNnT3fT/giphy.gif"
         },
         {
             title: "Connect & build",
             content: "When there's mutual interest, start a conversation and begin collaborating on your next big idea.",
-            imgUrl: "https://ik.imagekit.io/nduskvpccr/matching.png?updatedAt=1758822207556",
-            gifUrl: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHo0ZGJkNWMxNG8wbDJrZjZqNDEwMnl4NDdzNW9wejN4bXgyN2pmOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Jd8fMURv1DZrLQJRIw/giphy.gif"
+            imgUrl: "https://ik.imagekit.io/ixcfmut8e/hackmate/fqewfwqe.PNG",
+            gifUrl: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHVrOWxsYTE2azBub2puNXF5bHhha3o0MnN5djNpcG90MmNrcWRsMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IrH7rEXjLLbbyW0KX2/giphy.gif"
         }
     ]
     return (

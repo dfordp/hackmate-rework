@@ -8,41 +8,51 @@ const mPlus1p = M_PLUS_1p({
     weight: ['500']
 })
 
-// Testimonials data - Replace with your real testimonials
-const testimonials: TestimonialItem[] = [
-    // {
-    //     type: "custom",
-    //     id: "custom-1", 
-    //     text: "Your testimonial text here...",
-    //     image: "/",
-    //     name: "User Name",
-    //     role: "User Role",
-    // },
+const twitterTestimonials: TestimonialItem[] = [
     {
         type: "twitter",
         id: "twitter-1",
-        tweetId: "1970102716899696646",
+        content: "Lfg ❤️",
+        authorName: "Kartik",
+        authorHandle: "@code_kartik",
+        postedOn: "September 22, 2025",
+        tweetUrl: "https://x.com/code_kartik/status/1970102716899696646?ref_src=twsrc%5Etfw",
+        lang: "und",
     },
     {
         type: "twitter",
         id: "twitter-2",
-        tweetId: "1970089201128653270",
+        content: "Lessgoooo 🔥",
+        authorName: "Ameya",
+        authorHandle: "@ameyaidk",
+        postedOn: "September 22, 2025",
+        tweetUrl: "https://x.com/ameyaidk/status/1970089201128653270?ref_src=twsrc%5Etfw",
+        lang: "und",
     },
     {
         type: "twitter",
         id: "twitter-3",
-        tweetId: "1970167197051052042",
+        content: "This looks like a really fantastic project.. Great work Man",
+        authorName: "Duru Victor Ikechukwu",
+        authorHandle: "@iamduruvictor",
+        postedOn: "September 22, 2025",
+        tweetUrl: "https://x.com/iamduruvictor/status/1970167197051052042?ref_src=twsrc%5Etfw",
+        lang: "en",
     },
     {
         type: "twitter",
         id: "twitter-4",
-        tweetId: "1970165220258509231",
+        content: "Lessgoo",
+        authorName: "aditya",
+        authorHandle: "@adxtyahq",
+        postedOn: "September 22, 2025",
+        tweetUrl: "https://x.com/adxtyahq/status/1970165220258509231?ref_src=twsrc%5Etfw",
+        lang: "und",
     },
-    {
-        type: "twitter",
-        id: "twitter-5",
-        tweetId: "1971986687451713916",
-    },
+]
+
+const testimonials: TestimonialItem[] = [
+    ...twitterTestimonials,
     {
         type: "peerlist",
         id: "peerlist-1",

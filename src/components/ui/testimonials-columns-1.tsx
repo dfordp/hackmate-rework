@@ -26,7 +26,15 @@ export const TestimonialsColumn = (props: {
   };
 
   // Type guards for different testimonial types
-  const isTwitterTestimonial = (testimonial: TestimonialItem): testimonial is TestimonialItem & { type: 'twitter'; tweetId: string } => {
+  const isTwitterTestimonial = (testimonial: TestimonialItem): testimonial is TestimonialItem & {
+    type: 'twitter';
+    tweetUrl: string;
+    content: string;
+    authorName: string;
+    authorHandle: string;
+    postedOn: string;
+    lang?: string;
+  } => {
     return testimonial.type === 'twitter';
   };
 
@@ -78,7 +86,12 @@ export const TestimonialsColumn = (props: {
       return (
         <div key={`twitter-${testimonial.id}`} className="w-full max-w-sm mx-auto will-change-transform" style={{transform: "translate3d(0, 0, 0)"}}>
           <TwitterEmbed 
-            tweetId={testimonial.tweetId}
+            tweetUrl={testimonial.tweetUrl}
+            content={testimonial.content}
+            authorName={testimonial.authorName}
+            authorHandle={testimonial.authorHandle}
+            postedOn={testimonial.postedOn}
+            lang={testimonial.lang}
             className="w-full"
           />
         </div>

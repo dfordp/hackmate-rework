@@ -16,7 +16,12 @@ export interface CustomTestimonial {
 export interface TwitterTestimonial {
   type: 'twitter';
   id: string;
-  tweetId: string;
+  tweetUrl: string;
+  content: string;
+  authorName: string;
+  authorHandle: string;
+  postedOn: string;
+  lang?: string;
 }
 
 export interface PeerlistTestimonialData extends PeerlistTestimonialProps {
