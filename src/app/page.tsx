@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react""
+import { useEffect } from "react"
 import { Zap} from "lucide-react"
 import { Navbar } from "@/components/ui/navbar"
 import { DevelopmentPauseBanner } from "@/components/ui/development-pause-banner"
