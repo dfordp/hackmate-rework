@@ -122,7 +122,7 @@ export const TwitterEmbed: React.FC<TwitterEmbedProps> = ({
         colorScheme: 'dark'
       } as React.CSSProperties}
     >
-      <blockquote className="twitter-tweet" data-theme="dark" data-dnt="true" align="center" data-conversation="none">
+      <blockquote className="twitter-tweet" data-theme="dark" data-dnt="true" data-conversation="none">
         <p lang={lang} dir="ltr">{content}</p>
         &mdash; {authorName} ({authorHandle}) <a href={tweetUrl}>{postedOn}</a>
       </blockquote>
