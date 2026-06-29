@@ -88,9 +88,6 @@ export default function LandingPage() {
                   No social profiles, no fluff. Just raw experience, aligned intent, and mutual interest.
                 </p>
               </div>
-              <InteractiveHoverButton onClick={handleGetStarted}>
-                Get Started
-              </InteractiveHoverButton>
             </div>
             
             <div className="hidden md:block relative">
@@ -100,7 +97,7 @@ export default function LandingPage() {
                 height: "100vh",
                 pointerEvents: "auto",
               }}
-              scene="https://prod.spline.design/0M6AaAEVlkCJTe-n/scene.splinecode"
+                scene="https://prod.spline.design/0M6AaAEVlkCJTe-n/scene.splinecode" 
               />
               <div 
               className="absolute pointer-events-none z-50"
