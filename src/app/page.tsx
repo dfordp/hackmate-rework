@@ -100,7 +100,7 @@ export default function LandingPage() {
                 height: "100vh",
                 pointerEvents: "auto",
               }}
-              scene="https://prod.spline.design/z7hD8uCHC55lTHtO/scene.splinecode" 
+              scene="https://prod.spline.design/0M6AaAEVlkCJTe-n/scene.splinecode"
               />
               <div 
               className="absolute pointer-events-none z-50"
