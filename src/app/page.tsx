@@ -1,15 +1,12 @@
 'use client'
 
-import { useEffect } from "react"
-import { useUser } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
+import { useEffect } from "react""
 import { Zap} from "lucide-react"
 import { Navbar } from "@/components/ui/navbar"
 import { DevelopmentPauseBanner } from "@/components/ui/development-pause-banner"
 import Spline from '@splinetool/react-spline'
 import { M_PLUS_1p } from "next/font/google"
 // import FixedBadges from "@/components/ui/fixed-badges"
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import HowItWorks from "@/components/ui/how-it-works"
 import Link from "next/link"
 import { Chakra_Petch } from 'next/font/google'
@@ -29,22 +26,12 @@ const chakraPetch = Chakra_Petch({
 
 
 export default function LandingPage() {
-  const { isSignedIn } = useUser()
-  const router = useRouter()
-  
+
   // Scroll to top on page load/refresh
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
   
-  // Handle CTA button click
-  const handleGetStarted = () => {
-    if (isSignedIn) {
-      router.push('/explore')
-    } else {
-      router.push('/sign-in')
-    }
-  }
 
   
   return (
