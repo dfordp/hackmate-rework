@@ -91,7 +91,6 @@ export const TestimonialsColumn = (props: {
             authorName={testimonial.authorName}
             authorHandle={testimonial.authorHandle}
             postedOn={testimonial.postedOn}
-            lang={testimonial.lang}
             className="w-full"
           />
         </div>
